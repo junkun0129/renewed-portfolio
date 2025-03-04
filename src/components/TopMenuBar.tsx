@@ -58,19 +58,9 @@ function TopMenuBar({ activeNum, className }: PropsType) {
   }, [activeNum]);
   return (
     <>
-      {!sm && (
-        <div
-          style={{
-            width: "100vw",
-            height: "15vh",
-            position: "fixed",
-            backgroundImage: "url(/washi.jpg)",
-            backgroundSize: "cover",
-            zIndex: "10",
-          }}
-        ></div>
-      )}
-      <div className={className + " flex justify-center w-full mt-3"}>
+      <div
+        className={className + " flex justify-center items-center w-[90%] mt-5"}
+      >
         {sm && (
           <motion.div
             className={"flame"}
@@ -78,19 +68,19 @@ function TopMenuBar({ activeNum, className }: PropsType) {
             transition={{ duration: 1 }}
           ></motion.div>
         )}
-
         {menuItems.map((item, i) => {
           return (
-            <div className="h-full w-full flex">
+            <div key={i} className="h-full w-full flex">
               <motion.div
                 key={i + item.name}
+                className="bg-no-repeat bg-contain"
                 ref={(el) => (menuRefs.current[i] = el)}
                 style={{
                   backgroundImage: `url(${item.dark})`,
                   backgroundSize: "contain",
                   backgroundRepeat: "no-repeat",
-                  width: "90px",
-                  height: "90px",
+                  width: sm ? "90px" : "40px",
+                  height: sm ? "90px" : "40px",
                 }}
                 initial={{ scale: 0.5 }}
                 animate={activeNum === i ? { scale: 1 } : { scale: 0.7 }}
@@ -102,16 +92,28 @@ function TopMenuBar({ activeNum, className }: PropsType) {
                   transition={{ duration: 0.5, delay: 0.5 }}
                 ></motion.div>
               </motion.div>
-              <motion.div
-                animate={
-                  activeNum === i
-                    ? { marginLeft: 0, fontSize: "1.6rem" }
-                    : { marginLeft: -20, fontSize: "1rem" }
-                }
-                className="ml-0 flex items-center"
-              >
-                {item.name}
-              </motion.div>
+              {sm && (
+                <motion.div
+                  animate={
+                    activeNum === i
+                      ? { marginLeft: 0, fontSize: "1.6rem" }
+                      : { marginLeft: -20, fontSize: "1rem" }
+                  }
+                  className="ml-0 flex items-center"
+                >
+                  {item.name}
+                </motion.div>
+              )}
+              {!sm && (
+                <motion.div
+                  animate={
+                    activeNum === i ? { display: "block" } : { display: "none" }
+                  }
+                  className="mr-2 flex items-center mt-2"
+                >
+                  {item.name}
+                </motion.div>
+              )}
             </div>
           );
         })}

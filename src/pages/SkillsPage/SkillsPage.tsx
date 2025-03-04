@@ -7,11 +7,11 @@ import Boat from "../../components/Boat";
 import { introduces, skillsData } from "./constant";
 import { useAppContext } from "../../providers/AppProvider";
 import InitialWave from "../../components/InitialWave";
+import TextAnimation from "../../components/TextAnimation";
 
 type type = {
   style?: React.CSSProperties;
 };
-
 const SkillsPage = React.forwardRef(
   ({ style }: type, ref: React.Ref<HTMLDivElement>) => {
     const sm = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
@@ -30,14 +30,16 @@ const SkillsPage = React.forwardRef(
             )}
             {/* Floating Texts */}
             <div className="absolute w-full h-full overflow-hidden">
-              {Object.entries(introduces).map(([key, value], index) => (
-                <FloatingText
-                  key={key}
-                  text={`${key}: ${value}`}
-                  delay={index * 4} // 遅延を少し長めに
-                  initialXPosition={-200}
-                />
-              ))}
+              <div className="relative w-full h-full overflow-hidden">
+                {introduces.map((item) => (
+                  <TextAnimation
+                    key={item.name}
+                    delay={item.delay}
+                    top={item.top}
+                    text={`${item.name}: ${item.value}`}
+                  />
+                ))}
+              </div>
             </div>
             {sm &&
               skillsData.map((skill, i) => {
@@ -51,41 +53,3 @@ const SkillsPage = React.forwardRef(
 );
 
 export default SkillsPage;
-
-type FloatingTextProps = {
-  text: string;
-  delay: number;
-  initialXPosition: number;
-};
-function FloatingText({ text, delay, initialXPosition }: FloatingTextProps) {
-  const { size } = useAppContext();
-
-  return (
-    <motion.div
-      className="absolute whitespace-nowrap text-2xl font-japanese pointer-events-none"
-      style={{
-        y: Math.random() * 400 - 200, // より広い範囲でランダムな垂直位置
-      }}
-      initial={{
-        x: -200, // 画面外左から開始
-        opacity: 0,
-      }}
-      animate={{
-        x: size.screenWidth + 200, // 画面外右まで移動
-        opacity: [0, 1, 1, 0],
-      }}
-      transition={{
-        duration: 20,
-        delay,
-        repeat: Infinity,
-        ease: "linear",
-        opacity: {
-          duration: 20,
-          times: [0, 0.1, 0.9, 1],
-        },
-      }}
-    >
-      {text}
-    </motion.div>
-  );
-}

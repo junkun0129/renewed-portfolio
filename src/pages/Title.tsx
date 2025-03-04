@@ -16,17 +16,8 @@ type type = {
 };
 const Title = React.forwardRef(
   ({ style }: type, ref: React.Ref<HTMLDivElement>) => {
-    console.log("render title");
-    const position = useMousePosition();
-    const motionMousePositionX = useMotionValue(position.x);
-    const faceMoveX = useTransform(motionMousePositionX, [0, 500], [0, 500]);
-    const [nami] = useRenderTransform(position.x, [0, 1500], [-50, 50]);
-    const [nami2] = useRenderTransform(position.x, [0, 1500], [50, -50]);
     const md = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
     const sm = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
-    useEffect(() => {
-      console.log("smmmmmmmmmmmmmmmm");
-    }, [sm]);
 
     return (
       <>
